@@ -3,12 +3,24 @@
 # %% auto 0
 __all__ = ['cli']
 
+# %% ../nbs/01_cli.ipynb 3
+import platform
+
+import torch
+import timm
+import wandb
+
+from fastcore.script import *
+
+from .benchmark import *
+
 # %% ../nbs/01_cli.ipynb 4
 @call_parse
 def cli(wnb: str ="disabled",       # W&B mode. Accepted values: online, offline, disabled.
         wnb_run: str =None,    # W&B run name (auto-generate if None)
         wnb_project: str =None,
         wnb_entity: str =None,
+        run_number = 1,             # A unique number to keep track over repeat runs
         model: str ="resnet50",     # TIMM Model name
         bs: int =32,                #Batch size
         size: int =224,             # (fake) image size
@@ -37,6 +49,7 @@ def cli(wnb: str ="disabled",       # W&B mode. Accepted values: online, offline
         "bs": bs,
         "n_seconds": n_seconds if n_seconds else None,
         "n_batches": n_batches if n_batches else None,
+        "run_number": run_number, 
     }
 
     print("\n".join([ f"{k}: {v}" for k, v in stats.items() ]))

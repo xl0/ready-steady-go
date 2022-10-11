@@ -13,9 +13,9 @@ from torch.nn import functional as F
 from torch.cuda.amp.autocast_mode import autocast
 
 
-#import timm
+import timm
 from tqdm.auto import tqdm
-#import wandb
+
 
 # %% ../nbs/00_benchmark.ipynb 4
 def benchmark(model: nn.Module, # Model to run
