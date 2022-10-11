@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['cli']
 
-# %% ../nbs/01_cli.ipynb 3
+# %% ../nbs/01_cli.ipynb 4
 @call_parse
 def cli(wnb: str ="disabled",       # W&B mode. Accepted values: online, offline, disabled.
         wnb_run: str =None,    # W&B run name (auto-generate if None)

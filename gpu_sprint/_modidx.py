@@ -6,5 +6,4 @@ d = { 'settings': { 'branch': 'master',
                 'git_url': 'https://github.com/xl0/gpu-sprint',
                 'lib_path': 'gpu_sprint'},
   'syms': { 'gpu_sprint.benchmark': {'gpu_sprint.benchmark.benchmark': ('benchmark.html#benchmark', 'gpu_sprint/benchmark.py')},
-            'gpu_sprint.cli': {'gpu_sprint.cli.cli': ('cli.html#cli', 'gpu_sprint/cli.py')},
-            'gpu_sprint.core': {'gpu_sprint.core.foo': ('core.html#foo', 'gpu_sprint/core.py')}}}
+            'gpu_sprint.cli': {'gpu_sprint.cli.cli': ('cli.html#cli', 'gpu_sprint/cli.py')}}}
