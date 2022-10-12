@@ -2,8 +2,8 @@ project:
   output-dir: _docs
 
 website:
-  title: "gpu-sprint"
-  site-url: "https://xl0.github.io/gpu-sprint"
-  description: "Deep Learning GPU benchmark"
+  title: "ready_steady_go"
+  site-url: "https://xl0.github.io/ready-steady-go"
+  description: "Synthetic Deep Learning GPU benchmark"
   repo-branch: master
-  repo-url: "https://github.com/xl0/gpu-sprint"
+  repo-url: "https://github.com/xl0/ready-steady-go"

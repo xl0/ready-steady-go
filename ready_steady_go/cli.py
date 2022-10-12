@@ -50,6 +50,7 @@ def cli(wnb: str ="disabled",       # W&B mode. Accepted values: online, offline
         "n_seconds": n_seconds if n_seconds else None,
         "n_batches": n_batches if n_batches else None,
         "run_number": run_number, 
+        "gpu_mem" : torch.cuda.get_device_properties(0).total_memory,
     }
 
     print("\n".join([ f"{k}: {v}" for k, v in stats.items() ]))

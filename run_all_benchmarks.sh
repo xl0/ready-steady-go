@@ -1,24 +1,19 @@
 #!/bin/bash
 
-
-# I'm not sure why, wandb sometimes will quietly not sync some runs.
-# Run offline and sync everythign at the end.
-
-WANDB_MODE="offline"
+WANDB_MODE="online"
 WANDB_PROJECT="ready-steady-go"
 
-MODELS="resnet50 swin_s3_tiny_224"
-BATCHES="8 8 8 16 16 16 32 32 32" # 64 128 256 512 1024"
+MODELS="resnet50 vgg19 swin_s3_base_224"
+BATCHES="8 16 16 32 64 128 256 512 1024"
 
-N_SECONDS=3
-
+N_SECONDS=30
 
 #set -x
 
 wandb login
 
 echo "Warming up the GPU for 3 minutes..."
-# gpu-sprint --model=resnet50 --n_seconds=180
+gpu-sprint --model=resnet50 --n_seconds=180
 
 echo "Running benchmarks..."
 
@@ -30,11 +25,14 @@ do
             for bs in $BATCHES; do
                 ready-steady-go --model=$m $fp16 --bs=$bs --n_seconds=$N_SECONDS --wnb=$WANDB_MODE --wnb_project=$WANDB_PROJECT --run_number=$RUN
                 if [ $? -ne 0 ]; then
-                    break # We probably hit a batch size the GPU can't handle
+                    # We probably hit a batch size the GPU can't handle.
+                    # No need to try larger batch sizes.
+                    break
                 fi
             done
         done
     done
 done
 
-wandb sync --sync-all
+# I had weird data lossed with wandb for some reason.
+wandb sync --sync-all --include-synced
