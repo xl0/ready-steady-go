@@ -54,10 +54,8 @@ def cli(wnb: str ="disabled",       # W&B mode. Accepted values: online, offline
 
     print("\n".join([ f"{k}: {v}" for k, v in stats.items() ]))
 
-    run = wandb.init(mode=wnb, project=wnb_project, entity=wnb_entity, name=wnb_run)
-
-    with run:
-        wandb.log(stats, step=0)
+    with wandb.init(mode=wnb, project=wnb_project, entity=wnb_entity, name=wnb_run) as run:
+        run.log(stats, step=0, commit=True)
 
         model = timm.create_model(model, pretrained=False)
         duration, n_items = benchmark(model, bs=bs, size=size, fp16=fp16, n_batches=n_batches, n_seconds=n_seconds)
@@ -69,6 +67,6 @@ def cli(wnb: str ="disabled",       # W&B mode. Accepted values: online, offline
 
         print("\n".join([ f"{k}: {v}" for k, v in summary.items() ]))
 
-        wandb.log(summary, step=0)
+        run.log(summary, step=0, commit=True)
 
 
