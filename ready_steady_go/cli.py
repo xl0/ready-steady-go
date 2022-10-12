@@ -68,6 +68,6 @@ def cli(wnb: str ="disabled",       # W&B mode. Accepted values: online, offline
 
         print("\n".join([ f"{k}: {v}" for k, v in summary.items() ]))
 
-        run.log(summary, step=0, commit=True)
+        run.log(summary, step=1, commit=True)
 
 

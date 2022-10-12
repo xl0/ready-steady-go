@@ -32,7 +32,7 @@ from matplotlib import pyplot as plt
 
 api = wandb.Api()
 
-runs = api.runs("xl0/gpu-sprint")
+runs = api.runs("xl0/ready-steady-go")
 summaries = [ dict(r.summary) | {"id": r.id} for r in runs if r.state == "finished"]
 
 df = pd.DataFrame.from_records(summaries)
@@ -49,15 +49,9 @@ for model in df.model.unique():
         data = df.loc[ df.model.eq(model) & df.fp16.eq(fp) ]
         sorted_best_bs = data.groupby("device_name")["throughput"].max().sort_values()
     
-        ax = sorted_best_bs.plot.barh(title=f"{model}, {fp}")
+        ax = sorted_best_bs.plot.barh(title=f"{model}, {fp}", figsize=(12, 7))
         ax.set_ylabel(None)
         plt.show(ax)
 ```
 
-![](index_files/figure-gfm/cell-2-output-1.svg)
-
-![](index_files/figure-gfm/cell-2-output-2.svg)
-
-![](index_files/figure-gfm/cell-2-output-3.svg)
-
-![](index_files/figure-gfm/cell-2-output-4.svg)
+    KeyError: "['throughput'] not in index"

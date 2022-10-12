@@ -13,7 +13,7 @@ N_SECONDS=30
 wandb login
 
 echo "Warming up the GPU for 3 minutes..."
-gpu-sprint --model=resnet50 --n_seconds=180
+ready-steady-go --model=resnet50 --n_seconds=180
 
 echo "Running benchmarks..."
 

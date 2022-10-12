@@ -1,9 +1,0 @@
-project:
-  output-dir: _docs
-
-website:
-  title: "Ready, Steady, Go!"
-  site-url: "https://xl0.github.io/ready-steady-go"
-  description: "Deep Learning GPU benchmark"
-  repo-branch: master
-  repo-url: "https://github.com/xl0/ready-steady-go"
