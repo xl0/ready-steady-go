@@ -13,7 +13,7 @@ N_SECONDS=30
 wandb login
 
 echo "Warming up the GPU for 3 minutes..."
-# ready-steady-go --model=resnet50 --n_seconds=180
+ready-steady-go --model=resnet50 --n_seconds=180
 
 echo "Running benchmarks..."
 
@@ -34,5 +34,5 @@ do
     done
 done
 
-# I had weird data lossed with wandb for some reason.
+# Sync everything just in case. On a rare occasion wandb forgets to update symmary otherwise.
 wandb sync --sync-all --include-synced

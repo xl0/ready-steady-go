@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['benchmark']
 
-# %% ../nbs/00_benchmark.ipynb 3
+# %% ../nbs/00_benchmark.ipynb 4
 import time
 
 from itertools import count
@@ -15,7 +15,7 @@ from torch.cuda.amp.autocast_mode import autocast
 import timm
 from tqdm.auto import tqdm
 
-# %% ../nbs/00_benchmark.ipynb 4
+# %% ../nbs/00_benchmark.ipynb 6
 def benchmark(model: nn.Module, # Model to run
                 bs: int =32,    # Batch size
                 n_batches: int =None,  # Number of batches to run. `seconds` must be None
