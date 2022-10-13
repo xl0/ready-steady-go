@@ -4,7 +4,7 @@ WANDB_MODE="online"
 WANDB_PROJECT="ready-steady-go"
 
 MODELS="resnet50 vgg19 swin_s3_base_224"
-BATCHES="8 16 16 32 64 128 256 512 1024"
+BATCHES="8 16 32 64 128 256 512 1024 2048 4096"
 
 N_SECONDS=30
 
@@ -13,7 +13,7 @@ N_SECONDS=30
 wandb login
 
 echo "Warming up the GPU for 3 minutes..."
-ready-steady-go --model=resnet50 --n_seconds=180
+# ready-steady-go --model=resnet50 --n_seconds=180
 
 echo "Running benchmarks..."
 
