@@ -75,11 +75,11 @@ for model in df.model.unique():
     ax.set(ylabel=None, xlabel=None, title=model)
 ```
 
-![](index_files/figure-gfm/cell-5-output-1.svg)
+![](index_files/figure-gfm/cell-4-output-1.svg)
 
-![](index_files/figure-gfm/cell-5-output-2.svg)
+![](index_files/figure-gfm/cell-4-output-2.svg)
 
-![](index_files/figure-gfm/cell-5-output-3.svg)
+![](index_files/figure-gfm/cell-4-output-3.svg)
 
 ``` python
 f, ax = plt.subplots(figsize=(15, 6))
@@ -111,4 +111,4 @@ ax.legend(ncol=2, loc="lower right", frameon=True)
 _ = ax.set(ylabel=None, xlabel=None, title="Average between all models")
 ```
 
-![](index_files/figure-gfm/cell-6-output-1.svg)
+![](index_files/figure-gfm/cell-5-output-1.svg)
