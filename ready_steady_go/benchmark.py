@@ -15,7 +15,7 @@ from torch.cuda.amp.autocast_mode import autocast
 import timm
 from tqdm.auto import tqdm
 
-# %% ../nbs/00_benchmark.ipynb 6
+# %% ../nbs/00_benchmark.ipynb 5
 def benchmark(model: nn.Module, # Model to run
                 bs: int =32,    # Batch size
                 n_batches: int =None,  # Number of batches to run. `seconds` must be None
@@ -30,25 +30,15 @@ def benchmark(model: nn.Module, # Model to run
     assert not n_batches or not n_seconds
     assert n_batches or n_seconds
 
+
     torch.backends.cudnn.benchmark=True
     assert torch.backends.cudnn.is_available()
 
     model.to(dev)
-    optim = torch.optim.Adam(model.parameters(), lr=0.00001, weight_decay=0.00005)
+    optim = torch.optim.SGD(model.parameters(), lr=0.00001, weight_decay=0.00005, momentum=0.1)
 
     X = torch.randn((bs, 3, size, size), device=dev)
-
-    # Assume the head is for ImageNet with 1000 catagories.
     y = torch.randint(0, 999, (bs,), device=dev)
-
-    # Warm-up to run cudnn.benchmark first.
-    yhat = model(X)
-
-    loss = F.cross_entropy(yhat, y)
-    loss.backward()
-
-    optim.step()
-    optim.zero_grad(set_to_none=True)
 
     if n_batches:
         pbar = tqdm(total=n_batches, unit="Batch")
@@ -56,8 +46,7 @@ def benchmark(model: nn.Module, # Model to run
         pbar = tqdm(total=n_seconds,
             bar_format="{l_bar}{bar}| {n:.1f}/{total} s [{elapsed}<{remaining} {postfix}]")
 
-    start_time = time.time()
-    last_time = start_time
+    start_time, last_time = 0, 0
     for c in count():
         with autocast(enabled=fp16):
             yhat = model(X)
@@ -67,19 +56,29 @@ def benchmark(model: nn.Module, # Model to run
         optim.step()
         optim.zero_grad(set_to_none=True)
 
-        if n_batches:
-            pbar.update()
-            if c+1 == n_batches:
-                break
+        tt=time.time()
 
+        if not last_time:
+            pbar.write("Discarding the first iteration")
+
+        if n_batches:
+            if c == 0:
+                last_time, start_time = tt, tt
+            else:
+                pbar.update()
+                # Note: c starts with 0, but we discard the first iteration
+                if c == n_batches:
+                    break
         else:
-            now = time.time()
-            iter_time =  now - last_time
-            run_time = now - start_time
-            pbar.update(iter_time)
-            if run_time >= n_seconds:
-                break
-            last_time = now
+            if not last_time:
+                last_time, start_time = tt, tt
+            else:
+                iter_time =  tt - last_time
+                run_time = tt - start_time
+                pbar.update(iter_time)
+                if run_time >= n_seconds:
+                    break
+                last_time = tt
     pbar.close()
 
     return ((time.time() - start_time), c*bs)

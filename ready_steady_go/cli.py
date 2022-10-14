@@ -55,19 +55,21 @@ def cli(wnb: str ="disabled",       # W&B mode. Accepted values: online, offline
 
     print("\n".join([ f"{k}: {v}" for k, v in stats.items() ]))
 
-    with wandb.init(mode=wnb, project=wnb_project, entity=wnb_entity, name=wnb_run) as run:
-        run.log(stats, step=0, commit=True)
+    run =  wandb.init(mode=wnb, project=wnb_project, entity=wnb_entity, name=wnb_run)
+    run.log(stats, step=0, commit=True)
 
-        model = timm.create_model(model, pretrained=False)
-        duration, n_items = benchmark(model, bs=bs, size=size, fp16=fp16, n_batches=n_batches, n_seconds=n_seconds)
-        summary = {
-            "duration": duration,
-            "n_items": n_items,
-            "throughput": n_items / duration,
-        }
+    model = timm.create_model(model, pretrained=False)
+    duration, n_items = benchmark(model, bs=bs, size=size, fp16=fp16, n_batches=n_batches, n_seconds=n_seconds)
+    summary = {
+        "duration": duration,
+        "n_items": n_items,
+        "throughput": n_items / duration,
+    }
 
-        print("\n".join([ f"{k}: {v}" for k, v in summary.items() ]))
+    print("\n".join([ f"{k}: {v}" for k, v in summary.items() ]))
 
-        run.log(summary, step=1, commit=True)
+    run.log(summary, step=1, commit=True)
+    run.finish()
+
 
 
