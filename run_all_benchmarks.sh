@@ -23,7 +23,8 @@ do
     for m in $MODELS; do
         for fp16 in " " "--fp16"; do
             for bs in $BATCHES; do
-                ready-steady-go --model=$m $fp16 --bs=$bs --n_seconds=$N_SECONDS --wnb=$WANDB_MODE --wnb_project=$WANDB_PROJECT --run_number=$RUN
+                ready-steady-go --model=$m $fp16 --bs=$bs --n_seconds=$N_SECONDS \
+                    --wnb=$WANDB_MODE --wnb_project=$WANDB_PROJECT --run_number=$RUN
                 if [ $? -ne 0 ]; then
                     # We probably hit a batch size the GPU can't handle.
                     # No need to try larger batch sizes.

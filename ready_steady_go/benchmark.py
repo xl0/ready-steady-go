@@ -20,10 +20,9 @@ def benchmark(model: nn.Module, # Model to run
                 bs: int =32,    # Batch size
                 n_batches: int =None,  # Number of batches to run. `seconds` must be None
                 n_seconds: int =None,  # Number of seconds to run. `n_batches` must be None
-                fp16: int =False,           # Use Automatic Mixed Precision
-                size: int=224,              # Mock-train on this size "images"
+                fp16: int =False,      # Use Automatic Mixed Precision
+                size: int=224,         # Mock-train on this size "images"
                 dev: torch.device=torch.device("cuda:0"),): # Device to run on
-
     """Mock-train the model on random noise input."""
 
     # There can be only one
