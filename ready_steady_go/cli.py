@@ -70,6 +70,3 @@ def cli(wnb: str ="disabled",       # W&B mode. Accepted values: online, offline
 
     run.log(summary, step=1, commit=True)
     run.finish()
-
-
-
