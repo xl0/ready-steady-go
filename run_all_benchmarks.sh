@@ -11,6 +11,7 @@ N_SECONDS=30
 #set -x
 
 nvidia-smi -q > gpu-info.txt
+cat /proc/cpuinfo > cpu-info.txt
 
 wandb login
 
