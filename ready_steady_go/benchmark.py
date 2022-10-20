@@ -34,7 +34,7 @@ def benchmark(model: nn.Module, # Model to run
     assert torch.backends.cudnn.is_available()
 
     model.to(dev)
-    optim = torch.optim.SGD(model.parameters(), lr=0.00001, weight_decay=0.00005, momentum=0.9)
+    optim = torch.optim.SGD(model.parameters(), lr=0.00001, weight_decay=0.00005, momentum=0)
 
     state = { k : v.cpu() for k,v in model.state_dict().items() }
 
