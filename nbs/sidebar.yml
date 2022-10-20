@@ -3,4 +3,4 @@ website:
     contents:
       - index.ipynb
       - 00_benchmark.ipynb
-      - 01_cli.ipynb
+      - 02_cli.ipynb

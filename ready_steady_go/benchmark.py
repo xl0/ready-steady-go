@@ -4,8 +4,8 @@
 __all__ = ['benchmark']
 
 # %% ../nbs/00_benchmark.ipynb 4
+import os
 import time
-
 from itertools import count
 import torch
 from torch import nn
@@ -34,7 +34,10 @@ def benchmark(model: nn.Module, # Model to run
     assert torch.backends.cudnn.is_available()
 
     model.to(dev)
-    optim = torch.optim.SGD(model.parameters(), lr=0.00001, weight_decay=0.00005, momentum=0.1)
+    optim = torch.optim.SGD(model.parameters(), lr=0.00001, weight_decay=0.00005, momentum=0.9)
+
+    state = { k : v.cpu() for k,v in model.state_dict().items() }
+
 
     X = torch.randn((bs, 3, size, size), device=dev)
     y = torch.randint(0, 999, (bs,), device=dev)
@@ -44,33 +47,30 @@ def benchmark(model: nn.Module, # Model to run
     else:
         pbar = tqdm(total=n_seconds,
             bar_format="{l_bar}{bar}| {n:.1f}/{total} s [{elapsed}<{remaining} {postfix}]")
-
-    start_time, last_time = 0, 0
+    
+    start_time = last_time = 0
     for c in count():
+
+        model.load_state_dict(state)
+
         with autocast(enabled=fp16):
             yhat = model(X)
             loss = F.cross_entropy(yhat, y)
 
         loss.backward()
         optim.step()
-        optim.zero_grad(set_to_none=True)
 
         tt=time.time()
+        optim.zero_grad(set_to_none=True)
 
-        if not last_time:
-            pbar.write("Discarding the first iteration")
-
-        if n_batches:
-            if c == 0:
-                last_time, start_time = tt, tt
-            else:
+        if not start_time:
+            last_time = start_time = tt
+        else:
+            if n_batches:
                 pbar.update()
                 # Note: c starts with 0, but we discard the first iteration
                 if c == n_batches:
                     break
-        else:
-            if not last_time:
-                last_time, start_time = tt, tt
             else:
                 iter_time =  tt - last_time
                 run_time = tt - start_time
@@ -78,6 +78,7 @@ def benchmark(model: nn.Module, # Model to run
                 if run_time >= n_seconds:
                     break
                 last_time = tt
+
     pbar.close()
 
     return ((time.time() - start_time), c*bs)
